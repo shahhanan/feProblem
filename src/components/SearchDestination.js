@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { map } from "lodash";
+import { map, findIndex } from "lodash";
 import { Button, Popover, PopoverHeader, PopoverBody } from "reactstrap";
 function importAll(r) {
   return r.keys().map(r);
@@ -21,6 +21,8 @@ export default class Destinations extends Component {
       selectedVehicleData: null,
       hideDestinationButton: false,
       hideVehicleButton: false,
+      planetImage: planetImages,
+      vehicleImage: vehicleImages
     };
   }
   handlePlanetChange = (selected, destination) => {
@@ -67,7 +69,7 @@ export default class Destinations extends Component {
     let availablePlanets = planets;
     if (selectedPlanets.length != 0) {
       selectedPlanets.forEach(function(data) {
-        var indexOfplanet = planets.findIndex(object => object.value === data);
+        var indexOfplanet = findIndex(planets, {value : data});
         if (indexOfplanet != -1) {
           availablePlanets.splice(indexOfplanet, 1);
           planetImages.splice(indexOfplanet, 1);
@@ -78,17 +80,18 @@ export default class Destinations extends Component {
   };
   availableVehices = () => {
     let { vehicles, selectedVehicles } = this.props;
-    let availableVehices = [...vehicles];
+    let availableVehices = JSON.parse(JSON.stringify(vehicles))
     let selected = selectedVehicles;
+    let vImages = this.state.vehicleImage;
     if (selected.length != 0) {
       selected.forEach(function(data) {
-        var indexOfvehicle = vehicles.findIndex(object => object.name === data);
+        var indexOfvehicle = findIndex(availableVehices, {name : data});
         if (indexOfvehicle != -1) {
           if (vehicles[indexOfvehicle].total_no > 1) {
             availableVehices[indexOfvehicle].total_no--;
           } else {
             availableVehices.splice(indexOfvehicle, 1);
-            vehicleImages.splice(indexOfvehicle, 1);
+            vImages.splice(indexOfvehicle, 1);
           }
         }
       });
@@ -98,6 +101,7 @@ export default class Destinations extends Component {
   render() {
     let availablePlanets = this.availablePlanets();
     let availableVehices = this.availableVehices();
+    let { planetImage, vehicleImage } = this.state
     return (
       <div>
         <div>
@@ -120,7 +124,7 @@ export default class Destinations extends Component {
             <PopoverBody>
               {map(availablePlanets, (data, index) => {
                 let planetObject = {
-                  planetImage: planetImages[index],
+                  planetImage: planetImage[index],
                   planetName: data.value,
                   planetDistance: data.distance
                 };
@@ -130,7 +134,7 @@ export default class Destinations extends Component {
                     key={index}
                     onClick={() => this.handlePlanetChange(data, planetObject)}
                   >
-                    <img src={planetImages[index]} />
+                    <img src={planetImage[index]} />
                     <span id={data.value}>Planet Name: {data.label}</span>
                     <span>Distance: {data.distance}</span>
                   </div>
@@ -178,7 +182,7 @@ export default class Destinations extends Component {
                     data.max_distance >= this.state.vehicleMaxDistance
                   ) {
                     let vehicleInfo = {
-                      vehicleImage: vehicleImages[index],
+                      vehicleImage: vehicleImage[index],
                       vehicleName: data.name,
                       vehicleNumbers: data.total_no,
                       vehicleSpeed: data.speed
@@ -189,7 +193,7 @@ export default class Destinations extends Component {
                         key={index + "pods"}
                       >
                         <img
-                          src={vehicleImages[index]}
+                          src={vehicleImage[index]}
                           onClick={() =>
                             this.handleVehicleChange(data, vehicleInfo)
                           }
