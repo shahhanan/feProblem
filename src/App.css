@@ -1,0 +1,56 @@
+html,body,#root,.App{
+  height: 100%;
+  color: wheat;
+}
+.App{
+  background-image: url("../src/assets/images/stars.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+header .row{
+  padding: 10px 0px;
+}
+header .resetLink{
+  border-right: 1px solid gray;
+}
+header .resetLink button{
+  color: wheat;
+}
+.modal-dialog.introModal{
+  font-family: 'Dancing Script', cursive;
+  font-size: 24px;
+  width: 65%;
+  max-width: unset;
+  text-align: center;
+}
+.introModal .modal-content{
+  background-color: darkgray;
+}
+.introModal p{
+  color: green;
+}
+.introModal span.note{
+  color: white;
+}
+.popover{
+  width: 500px;
+  height: 230px;
+  overflow-y: hidden;
+  overflow-x: auto;
+  max-width: none !important;
+}
+.popover .popover-body div{
+  display: inline-block;
+  margin-right: 15px;
+  cursor: pointer;
+}
+.popover .popover-body div span{
+  display: block;
+  text-align: center;
+}
+.popover .popover-body {
+  width: max-content;
+}
+.pods p{
+  margin-bottom: 0 !important;
+}
